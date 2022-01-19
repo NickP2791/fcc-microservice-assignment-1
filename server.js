@@ -28,7 +28,7 @@ app.get("/api/:datecheck", function (req, res) {
   if (unixpattern.test(input) || datepattern.test(input)) {
     // need to convert any input to unix
     const utctime = unixpattern.test(input)
-      ? new Date(Number(input)).toUTCString()
+      ? new Date(parseInt(input)).toUTCString()
       : new Date(input).toUTCString();
 
     const unixtime = unixpattern.test(input)
