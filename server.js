@@ -38,7 +38,7 @@ app.get("/api/:datecheck", function (req, res) {
       : null;
 
     res.json({
-      unix: unixtime,
+      unix: unixtime.valueOf(),
       utc: utctime,
     });
   } else {
