@@ -38,7 +38,7 @@ app.get("/api/:datecheck", function (req, res) {
       : null;
 
     res.json({
-      unix: unixtime.valueOf(),
+      unix: Number(unixtime),
       utc: utctime,
     });
   } else {
@@ -53,7 +53,7 @@ app.get("/api/", function (req, res) {
   const utctime = new Date(input).toUTCString();
 
   res.json({
-    unix: input.valueOf(),
+    unix: Number(input),
     utc: utctime,
   });
 });
