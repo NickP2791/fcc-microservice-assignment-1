@@ -15,36 +15,46 @@ app.use(express.static("public"));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/views/index.html");
+  res.sendFile(__dirname + "/dist/index.html");
 });
 
 // your first API endpoint...
 app.get("/api/:datecheck", function (req, res) {
-  const newdate = new Date(req.params.datecheck);
-  const time = newdate.getTime();
-  const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][
-    newdate.getDay()
-  ];
-  const dayutc = newdate.getUTCDate();
-  const month = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ][newdate.getMonth()];
-  const year = newdate.getFullYear();
+  const input = req.params.datecheck || new Date().getTime();
+  const unixpattern = /^\d{13}$/;
+  const datepattern =
+    /^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$/;
+
+  if (unixpattern.test(input) || datepattern.test(input)) {
+    // need to convert any input to unix
+    const utctime = unixpattern.test(input)
+      ? new Date(Number(input)).toUTCString()
+      : new Date(input).toUTCString();
+
+    const unixtime = unixpattern.test(input)
+      ? input
+      : datepattern.test(input)
+      ? new Date(input).getTime()
+      : null;
+
+    res.json({
+      unix: unixtime,
+      utc: utctime,
+    });
+  } else {
+    res.json({ error: "Invalid Date" });
+  }
+});
+
+app.get("/api/", function (req, res) {
+  const input = new Date().getTime();
+
+  // need to convert any input to unix
+  const utctime = new Date(input).toUTCString();
 
   res.json({
-    unix: time,
-    utc: `${day}, ${dayutc} ${month} ${year} 00:00:00 GMT`,
+    unix: input,
+    utc: utctime,
   });
 });
 
