@@ -53,7 +53,7 @@ app.get("/api/", function (req, res) {
   const utctime = new Date(input).toUTCString();
 
   res.json({
-    unix: input,
+    unix: input.valueOf(),
     utc: utctime,
   });
 });
