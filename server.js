@@ -20,7 +20,7 @@ app.get("/", function (req, res) {
 
 // your first API endpoint...
 app.get("/api/:datecheck", function (req, res) {
-  const input = req.params.datecheck || new Date().getTime();
+  const input = req.params.datecheck;
   const unixpattern = /^\d{13}$/;
   const datepattern =
     /^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$/;
@@ -32,13 +32,13 @@ app.get("/api/:datecheck", function (req, res) {
       : new Date(input).toUTCString();
 
     const unixtime = unixpattern.test(input)
-      ? input
+      ? +input
       : datepattern.test(input)
       ? new Date(input).getTime()
       : null;
 
     res.json({
-      unix: Number(unixtime),
+      unix: unixtime,
       utc: utctime,
     });
   } else {
@@ -53,7 +53,7 @@ app.get("/api/", function (req, res) {
   const utctime = new Date(input).toUTCString();
 
   res.json({
-    unix: Number(input),
+    unix: +input,
     utc: utctime,
   });
 });
