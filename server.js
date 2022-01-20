@@ -30,7 +30,7 @@ app.get("/api/:datecheck", function (req, res) {
   if (unixpattern.test(input)) {
     //check if timestamp
     //then change from string to integer
-    input = parseInt(input);
+    const input = parseInt(input);
 
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
