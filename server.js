@@ -29,15 +29,13 @@ app.get("/api/:datecheck", function (req, res) {
 
   const output = {};
 
-  // if (unixpattern.test(input)) {
-  if (!isNaN(parseInt(input))) {
+  if (unixpattern.test(input)) {
     //check if timestamp
     //then change from string to integer
     input = parseInt(input);
 
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
-    // } else if (datepattern.test(input)) {
   } else if (datepattern.test(input)) {
     //check if iso date yyyy-mm-dd
     output["unix"] = new Date(input).getTime();
