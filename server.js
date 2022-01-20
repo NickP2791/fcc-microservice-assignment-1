@@ -28,8 +28,9 @@ app.get("/api/:datecheck", function (req, res) {
   const output = {};
 
   if (unixpattern.test(input)) {
-    output["unix"] = +input;
-    output["utc"] = new Date(parseInt(input)).toUTCString();
+    input = parseInt(input);
+    output["unix"] = new Date(input).getTime();
+    output["utc"] = new Date().toUTCString();
   } else if (datepattern.test(input)) {
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
