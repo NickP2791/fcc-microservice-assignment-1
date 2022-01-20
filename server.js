@@ -24,8 +24,6 @@ app.get("/", function (req, res) {
 app.get("/api/:datecheck", function (req, res) {
   let input = req.params.datecheck;
   const unixpattern = /^\d{13}$/;
-  const datepattern =
-    /^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$/;
 
   const output = {};
 
@@ -36,7 +34,7 @@ app.get("/api/:datecheck", function (req, res) {
 
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
-  } else if (datepattern.test(input)) {
+  } else if (new Date(input) !== null) {
     //check if iso date yyyy-mm-dd
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
