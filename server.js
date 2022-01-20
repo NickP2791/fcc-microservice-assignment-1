@@ -5,6 +5,8 @@
 var express = require("express");
 var app = express();
 
+const PORT = process.env.PORT || 5000;
+
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC
 var cors = require("cors");
@@ -20,7 +22,7 @@ app.get("/", function (req, res) {
 
 // your first API endpoint...
 app.get("/api/:datecheck", function (req, res) {
-  const input = req.params.datecheck;
+  let input = req.params.datecheck;
   const unixpattern = /^\d{13}$/;
   const datepattern =
     /^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$/;
@@ -30,7 +32,7 @@ app.get("/api/:datecheck", function (req, res) {
   if (unixpattern.test(input)) {
     //check if timestamp
     //then change from string to integer
-    const input = parseInt(input);
+    input = parseInt(+input);
 
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
@@ -42,26 +44,6 @@ app.get("/api/:datecheck", function (req, res) {
     res.json({ error: "Invalid Date" });
   }
   res.json(output);
-
-  // if (unixpattern.test(input) || datepattern.test(input)) {
-  //   // need to convert any input to unix
-  //   const utctime = unixpattern.test(input)
-  //     ?
-  //     : new Date(input).toUTCString();
-
-  //   const unixtime = unixpattern.test(input)
-  //     ? +input
-  //     : datepattern.test(input)
-  //     ? new Date(input).getTime()
-  //     : null;
-
-  // res.json({
-  //   unix: unixtime,
-  //   utc: utctime,
-  // });
-  // } else {
-  //   res.json({ error: "Invalid Date" });
-  // }
 });
 
 app.get("/api/", function (req, res) {
@@ -74,6 +56,6 @@ app.get("/api/", function (req, res) {
 });
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(PORT, function () {
   console.log("Your app is listening on port " + listener.address().port);
 });
