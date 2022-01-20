@@ -46,6 +46,7 @@ app.get("/api/:datecheck", function (req, res) {
   res.json(output);
 });
 
+// endpoint for empty req
 app.get("/api/", function (req, res) {
   const today = new Date().getTime();
   const output = {};
