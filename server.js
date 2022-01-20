@@ -34,8 +34,8 @@ app.get("/api/:datecheck", function (req, res) {
 
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
-  } else if (new Date(input) !== null) {
-    //check if iso date yyyy-mm-dd
+  } else if (!isNaN(Date.parse(input))) {
+    //check if iso date yyyy-mm-dd or dd mmm yyyy
     output["unix"] = new Date(input).getTime();
     output["utc"] = new Date(input).toUTCString();
   } else {
