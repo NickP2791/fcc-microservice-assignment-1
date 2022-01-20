@@ -25,37 +25,47 @@ app.get("/api/:datecheck", function (req, res) {
   const datepattern =
     /^[0-9]{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2][0-9]|3[0-1]))|(02-(0[1-9]|[1-2][0-9]))|((0[469]|11)-(0[1-9]|[1-2][0-9]|30)))$/;
 
-  if (unixpattern.test(input) || datepattern.test(input)) {
-    // need to convert any input to unix
-    const utctime = unixpattern.test(input)
-      ? new Date(parseInt(input)).toUTCString()
-      : new Date(input).toUTCString();
+  const output = {};
 
-    const unixtime = unixpattern.test(input)
-      ? +input
-      : datepattern.test(input)
-      ? new Date(input).getTime()
-      : null;
-
-    res.json({
-      unix: unixtime,
-      utc: utctime,
-    });
+  if (unixpattern.test(input)) {
+    output["unix"] = +input;
+    output["utc"] = new Date(parseInt(input)).toUTCString();
+  } else if (datepattern.test(input)) {
+    output["unix"] = new Date(input).getTime();
+    output["utc"] = new Date(input).toUTCString();
   } else {
-    res.json({ error: "Invalid Date" });
+    output["error"] = "Invalid Date";
   }
+  res.json(output);
+
+  // if (unixpattern.test(input) || datepattern.test(input)) {
+  //   // need to convert any input to unix
+  //   const utctime = unixpattern.test(input)
+  //     ?
+  //     : new Date(input).toUTCString();
+
+  //   const unixtime = unixpattern.test(input)
+  //     ? +input
+  //     : datepattern.test(input)
+  //     ? new Date(input).getTime()
+  //     : null;
+
+  // res.json({
+  //   unix: unixtime,
+  //   utc: utctime,
+  // });
+  // } else {
+  //   res.json({ error: "Invalid Date" });
+  // }
 });
 
 app.get("/api/", function (req, res) {
-  const input = new Date().getTime();
+  const today = new Date().getTime();
+  const output = {};
+  output["unix"] = +today;
+  output["utc"] = new Date(today).toUTCString();
 
-  // need to convert any input to unix
-  const utctime = new Date(input).toUTCString();
-
-  res.json({
-    unix: +input,
-    utc: utctime,
-  });
+  res.json(output);
 });
 
 // listen for requests :)
